@@ -1,0 +1,13 @@
+[package]
+name = "easy_pass"
+version = "0.1.0"
+authors = ["Pawel82S <theoptimizersgroup@gmail.com>"]
+edition = "2018"
+license = "MIT OR GPL2"
+description = "Easy Password creator is a program/lib for creating easliy passwords or hex numbers of specified length. It can use your words to mix in the password or just generate totally random one."
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.8.3"
+structopt = "0.3.21"
