@@ -184,10 +184,11 @@ mod tests {
             vec!["one".to_string(), "two".to_string(), "three".to_string()],
         )
     }
+
     #[test]
     fn correct_length() {
         let config = test_config();
-        let password = generate_random_password(&config, &VALID_CHARS);
+        let password = generate_password(&config, &VALID_CHARS, config.password_length());
         println!("Generated password: {}", password);
         assert_eq!(password.len(), config.password_length() as usize);
     }
@@ -204,11 +205,5 @@ mod tests {
         assert_eq!(substitute_char('E'), '3');
         assert_eq!(substitute_char('1'), 'L');
         assert_eq!(substitute_char('x'), 'x');
-    }
-
-    #[test]
-    fn total_length_of_words() {
-        let config = test_config();
-        assert_eq!(words_total_length(&config.words()), 11);
     }
 }
