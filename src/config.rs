@@ -58,8 +58,8 @@ impl Config {
         self.hex_value
     }
 
-    pub fn password_length(&self) -> u8 {
-        self.password_length
+    pub fn password_length(&self) -> usize {
+        self.password_length as usize
     }
 
     pub fn number_chance(&self) -> u8 {

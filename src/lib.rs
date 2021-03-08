@@ -19,9 +19,8 @@ pub fn run() {
     let config = Config::from_args();
     // println!("Current {:#?}", config);
 
-    if config.hex_value() {
-        let password = generate_hex_number(&config);
-        println!("{}", password);
+    let password = if config.hex_value() {
+        generate_hex_number(&config)
     } else {
         let mut allowed_chars = VALID_CHARS.to_vec();
 
@@ -29,8 +28,33 @@ pub fn run() {
             allowed_chars.append(&mut SPECIAL_CHARS.to_vec());
         }
 
-        let password = generate_random_password(&config, &allowed_chars);
-        println!("{}", password);
+        if let Some(words) = string_from_words(config.words()) {
+            password_with_words(words, &config, &allowed_chars)
+        } else {
+            generate_password(&config, &allowed_chars, config.password_length())
+        }
+    };
+
+    println!("{}", password);
+}
+
+fn password_with_words(word: String, config: &Config, allowed_chars: &Vec<char>) -> String {
+    if word.len() < config.password_length() {
+        let random_pass = generate_password(
+            &config,
+            &allowed_chars,
+            config.password_length() - word.len(),
+        );
+
+        let new_word = if config.substitute() {
+            modify_word(word)
+        } else {
+            word
+        };
+
+        format!("{}{}", new_word, random_pass)
+    } else {
+        word
     }
 }
 
@@ -42,22 +66,20 @@ fn string_from_words(words: &Vec<String>) -> Option<String> {
             result.push_str(&word);
         }
 
-        Some(result)
+        if result.len() > 0 {
+            Some(result)
+        } else {
+            None
+        }
     } else {
         None
     }
 }
 
-fn generate_random_password(config: &Config, chars: &[char]) -> String {
-    let length = config.password_length() as usize;
+fn generate_password(config: &Config, chars: &[char], length: usize) -> String {
     let mut result = String::with_capacity(length);
     let chars_len = chars.len();
     let mut rng = rand::thread_rng();
-    let mut words_processed_chars = 0;
-
-    if let Some(words) = string_from_words(&config.words()) {
-        println!("Words combined: {}", words);
-    }
 
     while result.len() < length {
         if config.number_chance() < rng.gen_range(0..100) {
@@ -93,6 +115,10 @@ fn generate_hex_number(config: &Config) -> String {
     }
 
     result
+}
+
+fn modify_word(word: String) -> String {
+    word.chars().map(|ch| substitute_char(ch)).collect()
 }
 
 fn substitute_char(ch: char) -> char {
@@ -137,21 +163,9 @@ fn substitute_char(ch: char) -> char {
     }
 }
 
-fn words_total_length(words: &Vec<String>) -> usize {
-    words.iter().map(|word| word.len()).sum()
-}
-
-fn modify_words(words: &Vec<String>, availible_length: usize, config: &Config) -> String {
-    let mut result = String::with_capacity(availible_length);
-
-    if availible_length == 0 {
-        return result;
-    }
-
-    for word in words {}
-
-    result
-}
+//fn words_total_length(words: &Vec<String>) -> usize {
+//    words.iter().map(|word| word.len()).sum()
+//}
 
 #[cfg(test)]
 mod tests {
