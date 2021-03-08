@@ -1,4 +1,3 @@
-//! Every optimization is taken to make passwords or hex numbers to as fast as possible
 mod config;
 
 use config::Config;
@@ -122,7 +121,9 @@ fn modify_word(word: String) -> String {
 }
 
 fn substitute_char(ch: char) -> char {
-    match ch.to_uppercase().next().unwrap_or(ch) {
+    let is_lowercase = ch.is_lowercase();
+
+    let ch = match ch.to_uppercase().next().unwrap_or(ch) {
         '0' => 'O',
         '1' => 'L',
         '2' => 'Z',
@@ -160,12 +161,14 @@ fn substitute_char(ch: char) -> char {
         //'Y' => 'X',
         'Z' => '2',
         _ => ch,
+    };
+
+    if is_lowercase {
+        ch.to_lowercase().next().unwrap_or(ch)
+    } else {
+        ch
     }
 }
-
-//fn words_total_length(words: &Vec<String>) -> usize {
-//    words.iter().map(|word| word.len()).sum()
-//}
 
 #[cfg(test)]
 mod tests {
