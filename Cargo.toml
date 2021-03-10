@@ -1,6 +1,6 @@
 [package]
 name = "easy_pass"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Pawel82S <theoptimizersgroup@gmail.com>"]
 edition = "2018"
 license = "MIT OR GPL2"
