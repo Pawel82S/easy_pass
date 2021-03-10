@@ -37,6 +37,7 @@ pub fn run() {
     println!("{}", password);
 }
 
+// TODO: cut too long words to exact lenght
 fn password_with_words(word: String, config: &Config, allowed_chars: &Vec<char>) -> String {
     if word.len() < config.password_length() {
         let random_pass = generate_password(
@@ -53,7 +54,7 @@ fn password_with_words(word: String, config: &Config, allowed_chars: &Vec<char>)
 
         format!("{}{}", new_word, random_pass)
     } else {
-        word
+        get_n_chars_from_word(word, config.password_length())
     }
 }
 
@@ -118,6 +119,21 @@ fn generate_hex_number(config: &Config) -> String {
 
 fn modify_word(word: String) -> String {
     word.chars().map(|ch| substitute_char(ch)).collect()
+}
+
+fn get_n_chars_from_word(word: String, n: usize) -> String {
+    let mut result = String::new();
+    let mut index = 0;
+
+    for ch in word.chars() {
+        result.push(ch);
+        index += 1;
+        if index == n {
+            break;
+        }
+    }
+
+    result
 }
 
 fn substitute_char(ch: char) -> char {
