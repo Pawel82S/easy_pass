@@ -69,4 +69,12 @@ impl Config {
     pub fn words(&self) -> &Vec<String> {
         &self.words
     }
+
+    pub fn words_combined(&self) -> String {
+        self.words.iter().collect()
+    }
+
+    pub fn words_length(&self) -> usize {
+        self.words.iter().map(|word| word.len()).sum()
+    }
 }

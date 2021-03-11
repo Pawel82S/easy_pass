@@ -16,7 +16,6 @@ const SPECIAL_CHARS: [char; 28] = [
 
 pub fn run() {
     let config = Config::from_args();
-    // println!("Current {:#?}", config);
 
     let password = if config.hex_value() {
         generate_hex_number(&config)
@@ -37,7 +36,6 @@ pub fn run() {
     println!("{}", password);
 }
 
-// TODO: cut too long words to exact lenght
 fn password_with_words(word: String, config: &Config, allowed_chars: &Vec<char>) -> String {
     if word.len() < config.password_length() {
         let random_pass = generate_password(
